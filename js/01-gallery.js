@@ -7,7 +7,9 @@ const imagesMarkup = createGalleryMarkup(galleryItems);
 
 galleryBoard.insertAdjacentHTML("beforeend", imagesMarkup);
 
-console.log(createGalleryMarkup(galleryItems));
+galleryBoard.addEventListener("click", onGalleryItemClick);
+
+// console.log(createGalleryMarkup(galleryItems));
 
 function createGalleryMarkup(galleryItems) {
   return galleryItems
@@ -28,8 +30,6 @@ function createGalleryMarkup(galleryItems) {
     .join("");
 }
 
-galleryBoard.addEventListener("click", onGalleryItemClick);
-
 function onGalleryItemClick(e) {
   e.preventDefault();
 
@@ -37,29 +37,29 @@ function onGalleryItemClick(e) {
     return;
   }
 
-  const instance = basicLightbox.create(`
+  const instance = basicLightbox.create(
+    `
     <div class="modal">
     <img src='${e.target.dataset.source}'>
     </div>,
-   `, {
-    onShow: () => {
-      window.addEventListener("keydown", onPressEscape);
-    },
-    onClose: () => {
-      window.removeEventListener("keydown", onPressEscape)
-    },
-   }
-   );
+   `,
+    {
+      onShow: () => {
+        window.addEventListener("keydown", onPressEscape);
+      },
+      onClose: () => {
+        window.removeEventListener("keydown", onPressEscape);
+      },
+    }
+  );
 
   instance.show();
 
-function onPressEscape(e) {
-  if (e.code !== "Escape") {
-    return;
+  function onPressEscape(e) {
+    if (e.code !== "Escape") {
+      return;
+    }
+
+    instance.close();
   }
-
-  instance.close();
 }
-
-}
-
